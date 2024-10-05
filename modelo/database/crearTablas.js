@@ -62,7 +62,7 @@ const tablas = [
 /**
  * Función para crear las tablas
  */
-const crearTablas = () => {
+async function crearTablas() {
     const db = Database.open();
 
     // Iterar sobre las definiciones de las tablas
@@ -79,4 +79,4 @@ const crearTablas = () => {
 };
 
 
-module.exports = crearTablas;
+module.exports = crearTablas();
