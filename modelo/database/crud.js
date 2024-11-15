@@ -4,15 +4,41 @@ const Database = require('./conexion');
 function executeQuery(query, params = []) {
     const db = Database.open();
     return new Promise((resolve, reject) => {
+        if (query.trim().toUpperCase().startsWith('SELECT')) {
+            // Para consultas SELECT, usa `db.all()`
+            db.all(query, params, function (err, rows) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows); // Devuelve los resultados
+                }
+            });
+        } else {
+            // Para otras consultas (INSERT, UPDATE, DELETE), usa `db.run()`
+            db.run(query, params, function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(this); // Devuelve `this`, que contiene `lastID` y `changes`
+                }
+            });
+        }
+    });
+}
+/*
+function executeQuery(query, params = []) {
+    const db = Database.open();
+    return new Promise((resolve, reject) => {
         db.run(query, params, function (err) {
             if (err) {
                 reject(err);
             } else {
-                resolve(this); // `this` contiene información de la ejecución
+                resolve(this); // this contiene información de la ejecución
             }
         });
     });
-}
+}*/
+
 
 // Obtener todas las filas de una tabla
 async function getAll(table) {
@@ -65,5 +91,6 @@ module.exports = {
     getOne,
     insert,
     update,
-    remove
+    remove,
+    executeQuery
 };
