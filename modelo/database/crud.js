@@ -1,44 +1,31 @@
 const Database = require('./conexion');
 
 // Función auxiliar para ejecutar consultas con un resultado único
-function executeQuery(query, params = []) {
+function executeSelectQuery(query, params = []) {
     const db = Database.open();
     return new Promise((resolve, reject) => {
-        if (query.trim().toUpperCase().startsWith('SELECT')) {
-            // Para consultas SELECT, usa `db.all()`
-            db.all(query, params, function (err, rows) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(rows); // Devuelve los resultados
-                }
-            });
-        } else {
-            // Para otras consultas (INSERT, UPDATE, DELETE), usa `db.run()`
-            db.run(query, params, function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this); // Devuelve `this`, que contiene `lastID` y `changes`
-                }
-            });
-        }
+        db.all(query, params, function (err, rows) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows); // Devuelve los resultados
+            }
+        });
     });
 }
-/*
-function executeQuery(query, params = []) {
+
+function executeNonSelectQuery(query, params = []) {
     const db = Database.open();
     return new Promise((resolve, reject) => {
         db.run(query, params, function (err) {
             if (err) {
                 reject(err);
             } else {
-                resolve(this); // this contiene información de la ejecución
+                resolve(this); // Devuelve `this`, que contiene `lastID` y `changes`
             }
         });
     });
-}*/
-
+}
 
 // Obtener todas las filas de una tabla
 async function getAll(table) {
@@ -92,5 +79,6 @@ module.exports = {
     insert,
     update,
     remove,
-    executeQuery
+    executeSelectQuery,
+    executeNonSelectQuery
 };

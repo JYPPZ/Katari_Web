@@ -15,17 +15,15 @@ class Database {
      * @returns {sqlite3.Database} - Retorna la instancia de la conexión a la base de datos
      */
     static open() {
-        if (this.db) {
-            console.log('La conexión ya está abierta.');
-            return this.db;
+        if (!this.db) {
+            this.db = new sqlite3.Database(dbPath, (err) => {
+                if (err) {
+                    console.error('Error al abrir la base de datos:', err.message);
+                    throw err;
+                }
+                console.log('Conectado a la base de datos.');
+            });
         }
-        this.db = new sqlite3.Database(dbPath, (err) => {
-            if (err) {
-                console.error('Error al abrir la base de datos:', err.message);
-                throw err;
-            }
-            console.log('Conectado a la base de datos.');
-        });
         return this.db;
     }
 
@@ -33,9 +31,7 @@ class Database {
      * Cierra la conexión a la base de datos
      */
     static close() {
-        if (this.db) {
-            this.db.close();
-        } else {
+        if (!this.db) {
             console.log('No hay conexión abierta para cerrar.');
         }
     }
