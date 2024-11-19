@@ -1,9 +1,10 @@
 const app = require('./app');
+const config = require('./config');
 const crearTablas = require('../modelo/database/crearTablas');
 
 crearTablas.then(() => {
-    app.listen(app.get('port'), () => {
-        console.log("Servidor escuchando en el puerto", app.get('port'));
+    app.listen(config.app.port, () => {
+        console.log("Servidor escuchando en el puerto", config.app.port);
     });
 }).catch(err => {
     console.error('Error durante la inicialización de la base de datos:', err);

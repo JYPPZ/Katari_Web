@@ -14,7 +14,7 @@ async function insertSensorData(sensorDataJson) {
     for (const [nombre,datos] of Object.entries(sensores)) {
 
         const readingsString = JSON.stringify(datos.readings); // Convertir a string para insertar en la BD
-        const id_sensor = await crud.executeQuery(query, [datos.sensor_id]); // Extraer id de sensor dado su referencia
+        const id_sensor = await crud.executeSelectQuery(query, [datos.sensor_id]); // Extraer id de sensor dado su referencia
 
         const lecturaData = {
             id_sensor: id_sensor[0].id_sensor,
