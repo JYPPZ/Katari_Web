@@ -54,4 +54,21 @@ router.get('/:lecturaId', async (req, res) => {
         }, 500);
     }
 });
+router.post('/', async (req, res) => {
+    try {
+        const lectura = await controlador.insertarLectura(req.body);
+
+        respuesta.success(req, res, {
+            success: true,
+            message: 'Datos insertados exitosamente',
+            data: lectura,
+        }, 201);
+    } catch (error) {
+        respuesta.error(req, res, {
+            success: false,
+            message: 'Ocurrio un error al insertar los datos',
+            error: error.message,
+        }, 500);
+    }
+});
 module.exports = router;

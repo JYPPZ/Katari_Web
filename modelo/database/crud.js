@@ -82,7 +82,7 @@ async function insert(table, data) {
  * @param id - Valor de la clave primaria
  * @returns {Promise<{affectedItems: number}>} - Promesa que se resuelve con el número de filas afectadas
  */
-async function update(table, primaryKey, data, id) {
+async function update(table, primaryKey, id, data) {
     const updates = Object.keys(data).map(key => `${key} = ?`).join(', ');
     const query = `UPDATE ${table} SET ${updates} WHERE ${primaryKey} = ?`;
     const result = await executeNonSelectQuery(query, [...Object.values(data), id]);

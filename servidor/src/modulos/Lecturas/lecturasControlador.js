@@ -15,9 +15,13 @@ module.exports = function (servicio) {
     async function obtenerLecturasPorId(lecturaId) {
         return await servicio.getAllById(lecturaId);
     }
+    async function insertarLectura(lecturaData) {
+        return await servicio.insert(lecturaData);
+    }
     return {
         obtenerLecturas,
         obtenerLecturasPorSensor,
-        obtenerLecturasPorId
+        obtenerLecturasPorId,
+        insertarLectura
     };
 };

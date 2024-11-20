@@ -10,9 +10,13 @@ module.exports = function (db) {
     async function getAllById(lacturaId) {
         return await db.getOne(TABLE_NAME, 'id_lectura', lacturaId);
     }
+    async function insert(lecturaData) {
+        return await db.insert(TABLE_NAME, lecturaData);
+    }
     return {
         getAll,
         getAllBySensor,
         getAllById,
+        insert
     };
 };
