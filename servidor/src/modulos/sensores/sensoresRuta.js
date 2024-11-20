@@ -25,10 +25,10 @@ router.get('/:sensorId', async (req, res) => {
         const sensor = await controlador.obtenerSensorPorId(req.params.sensorId);
 
         respuesta.success(req, res, {
-            success: true,
-            message: sensor ? 'Sensor encontrado exitosamente' : 'Sensor no encontrado',
+            success: sensor && sensor.length > 0,
+            message: sensor && sensor.length > 0 ? 'Sensor encontrado exitosamente' : 'Sensor no encontrado',
             data: sensor,
-        }, sensor ? 200 : 404);
+        }, sensor && sensor.length > 0 ? 200 : 404);
     } catch (error) {
         respuesta.error(req, res, {
             success: false,
@@ -57,12 +57,18 @@ router.post('/', async (req, res) => {
 router.put('/:sensorId', async (req, res) => {
     try {
         const sensor = await controlador.actualizarSensor(req.params.sensorId, req.body);
-
-        respuesta.success(req, res, {
-            success: true,
-            message: 'Sensor actualizado exitosamente',
-            data: sensor,
-        }, 200);
+        if (sensor.affectedItems !== 0) {
+            respuesta.success(req, res, {
+                success: true,
+                message: 'Sensor actualizado exitosamente',
+                data: sensor,
+            }, 200);
+        } else {
+            respuesta.error(req, res, {
+                success: false,
+                message: 'Sensor no encontrado',
+            }, 404);
+        }
     } catch (error) {
         respuesta.error(req, res, {
             success: false,
@@ -75,11 +81,18 @@ router.delete('/:sensorId', async (req, res) => {
     try {
         const sensor = await controlador.eliminarSensor(req.params.sensorId);
 
-        respuesta.success(req, res, {
-            success: true,
-            message: 'Sensor eliminado exitosamente',
-            data: sensor,
-        }, 200);
+        if (sensor.affectedItems !== 0) {
+            respuesta.success(req, res, {
+                success: true,
+                message: 'Sensor eliminado exitosamente',
+                data: sensor,
+            }, 200);
+        } else {
+            respuesta.error(req, res, {
+                success: false,
+                message: 'Sensor no encontrado',
+            }, 404);
+        }
     } catch (error) {
         respuesta.error(req, res, {
             success: false,
